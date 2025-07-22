@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>INSTRUCCIONES - UMBRAL 2</title>
+  <style>
+    body {
+      background: #000;
+      color: #00ffcc;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      animation: glitch 2s infinite;
+      text-align: center;
+    }
+
+    @keyframes glitch {
+      0% { text-shadow: 2px 2px #f0f, -2px -2px #0ff; }
+      20% { text-shadow: -2px -2px #f0f, 2px 2px #0ff; }
+      40% { text-shadow: 2px -2px #f0f, -2px 2px #0ff; }
+      60% { text-shadow: 1px 1px #f0f, -1px -1px #0ff; }
+      80% { text-shadow: -1px 1px #f0f, 1px -1px #0ff; }
+      100% { text-shadow: 2px 2px #f0f, -2px -2px #0ff; }
+    }
+
+    .audio-area {
+      margin-top: 30px;
+      background: rgba(0, 255, 204, 0.08);
+      border: 2px dashed #00ffcc;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 80%;
+      max-width: 400px;
+    }
+
+    audio {
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    .instructions {
+      margin-top: 20px;
+      font-size: 0.9em;
+      color: #aaa;
+      text-align: center;
+      max-width: 600px;
+    }
+
+    .matrix-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      background: black;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<div class="matrix-bg">
+  <canvas id="matrix"></canvas>
+</div>
+
+<h1>INSTRUCCIONES - UMBRAL 2</h1>
+
+<div class="audio-area">
+  <audio controls autoplay>
+    <source src="UMBRAL_2_agente_secreto.mp3" type="audio/mpeg">
+    Tu navegador no soporta la reproducción de audio.
+  </audio>
+</div>
+
+<div class="instructions">
+  El agente ha dejado un mensaje. Reproduce el audio. El umbral se abrirá solo si escuchas.
+</div>
+
+<script>
+  const canvas = document.getElementById("matrix");
+  const ctx = canvas.getContext("2d");
+
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+
+  const letters = "01∆Ξ≡☰▣▤▥▦▧▨▩";
+  const fontSize = 14;
+  const columns = canvas.width / fontSize;
+  const drops = Array(Math.floor(columns)).fill(1);
+
+  function drawMatrix() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#00ffcc";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = letters[Math.floor(Math.random() * letters.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  setInterval(drawMatrix, 50);
+
+  window.addEventListener('resize', () => {
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+  });
+</script>
+
+</body>
+</html>
